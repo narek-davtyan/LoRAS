@@ -110,4 +110,4 @@ def fit_resample(maj_class_points, min_class_points, k=None, num_shadow_points=N
     
     oversampled_set = loras_oversampling(min_class_points, k, num_shadow_points, list_sigma_f, num_generated_points, num_aff_comb, random_state)
 
-    return np.concatenate(oversampled_set, min_class_points)
+    return np.concatenate((oversampled_set, min_class_points))
