@@ -3,7 +3,7 @@ import concurrent.futures
 import pandas as pd
 import numpy as np
 
-def __knn(min_class_points, k):
+def knn(min_class_points, k):
     nbrs = NearestNeighbors(n_neighbors=k, algorithm='ball_tree').fit(min_class_points)
     _, indices = nbrs.kneighbors(min_class_points)
     neighbourhood = []
@@ -11,7 +11,7 @@ def __knn(min_class_points, k):
         neighbourhood.append(min_class_points[i])
     return(np.asarray(neighbourhood)) 
 
-def __neighbourhood_oversampling(args):
+def neighbourhood_oversampling(args):
     # Extracting arguments
     neighbourhood,k,num_shadow_points,list_sigma_f,num_generated_points,num_aff_comb,seed = args
     # Setting seed
@@ -43,7 +43,7 @@ def __neighbourhood_oversampling(args):
     
     return neighbourhood_loras_set
 
-def __loras_oversampling(min_class_points, k, num_shadow_points, list_sigma_f, num_generated_points, num_aff_comb, seed):
+def loras_oversampling(min_class_points, k, num_shadow_points, list_sigma_f, num_generated_points, num_aff_comb, seed):
     # Calculating neighbourhoods of each minority class parent data point p in min_class_points
     neighbourhoods = knn(min_class_points, k)
     # Preparing arguments
