@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="loras",
-    version="0.0.7-beta",
+    version="0.0.10-beta",
     author="Saptarshi Bej, Narek Davtyan",
     author_email="davtyannarek@hotmail.com",
     description="A small package for LoRAS oversampling",
@@ -19,6 +19,6 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     install_requires=[
-          'scikit-learn', 'pandas', 'numpy'
+          'scikit-learn', 'numpy'
     ],
 )

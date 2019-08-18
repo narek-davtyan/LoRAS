@@ -1,3 +1,1 @@
-name = "loras"
-
-__all__ = ["loras"]
+from .loras import loras
