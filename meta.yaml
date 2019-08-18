@@ -1,0 +1,23 @@
+package:
+  name: loras
+  version: master
+
+source:
+  git_rev: master
+  git_url: https://github.com/narek-davtyan/LoRAS.git
+
+requirements:
+
+  build:
+    - python =3.7
+    - git
+    - setuptools
+    - conda-verify
+
+  run:
+    - python =3.7
+    - numpy =1.16
+    - scikit-learn =0.21
+
+about:
+  home: https://github.com/narek-davtyan/LoRAS.git
