@@ -13,9 +13,9 @@ def knn(min_class_points, k):
 
 def neighbourhood_oversampling(args):
     # Extracting arguments
-    neighbourhood,k,num_shadow_points,list_sigma_f,num_generated_points,num_aff_comb,seed = args
+    neighbourhood,k,num_shadow_points,list_sigma_f,num_generated_points,num_aff_comb,random_state = args
     # Setting seed
-    np.random.seed(seed)
+    np.random.seed(random_state)
     # Calculating shadow points
     neighbourhood_shadow_sample = []
     for i in range(k):
@@ -43,13 +43,13 @@ def neighbourhood_oversampling(args):
     
     return neighbourhood_loras_set
 
-def loras_oversampling(min_class_points, k, num_shadow_points, list_sigma_f, num_generated_points, num_aff_comb, seed):
+def loras_oversampling(min_class_points, k, num_shadow_points, list_sigma_f, num_generated_points, num_aff_comb, random_state):
     # Calculating neighbourhoods of each minority class parent data point p in min_class_points
     neighbourhoods = knn(min_class_points, k)
     # Preparing arguments
     args = []
     for neighbourhood in neighbourhoods:
-        arg = (neighbourhood, k, num_shadow_points, list_sigma_f, num_generated_points, num_aff_comb, seed)
+        arg = (neighbourhood, k, num_shadow_points, list_sigma_f, num_generated_points, num_aff_comb, random_state)
         args.append(arg)
     # Generating points
     loras_set = []
@@ -60,7 +60,7 @@ def loras_oversampling(min_class_points, k, num_shadow_points, list_sigma_f, num
     
     return np.asarray(loras_set)
 
-def loras(maj_class_points, min_class_points, k=None, num_shadow_points=None, list_sigma_f=None, num_generated_points=None, num_aff_comb=None, seed=42):
+def fit_resample(maj_class_points, min_class_points, k=None, num_shadow_points=None, list_sigma_f=None, num_generated_points=None, num_aff_comb=None, random_state=42):
     
     # Verifying constraints
     if len(min_class_points)==0:
@@ -108,4 +108,6 @@ def loras(maj_class_points, min_class_points, k=None, num_shadow_points=None, li
         print("[PARAMETER ERROR] Number of affine combinations must be smaller or equal to k * number of shadow points")
         raise SystemExit
     
-    return loras_oversampling(min_class_points, k, num_shadow_points, list_sigma_f, num_generated_points, num_aff_comb, seed)
+    oversampled_set = loras_oversampling(min_class_points, k, num_shadow_points, list_sigma_f, num_generated_points, num_aff_comb, random_state)
+
+    return np.concatenate(oversampled_set, min_class_points)

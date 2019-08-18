@@ -1,1 +1,1 @@
-from .loras import loras
+from .loras import fit_resample
