@@ -60,6 +60,55 @@ def loras_oversampling(min_class_points, k, num_shadow_points, list_sigma_f, num
     
     return np.asarray(loras_set)
 
+def oversample(maj_class_points, min_class_points, k=None, num_shadow_points=None, list_sigma_f=None, num_generated_points=None, num_aff_comb=None, random_state=42):
+    # Verifying constraints
+    if len(min_class_points)==0:
+        print("[PARAMETER ERROR] Empty minority class")
+        raise SystemExit
+    if len(maj_class_points)==0:
+        print("[PARAMETER ERROR] Empty majority class")
+        raise SystemExit
+    if len(min_class_points) >= len(maj_class_points):
+        print("[PARAMETER ERROR] Number of points in minority class is equal to or exceeds number of points in the majority class")
+        raise SystemExit
+    
+    # Completing missing parameters w/ default values
+    if k is None:
+        k = 8 if len(min_class_points)<100 else 30
+    if num_aff_comb is None:
+        num_aff_comb = min_class_points.shape[1]
+    if num_shadow_points is None:
+        import math
+        num_shadow_points = math.ceil(2*num_aff_comb / k)
+    if list_sigma_f is None:
+        list_sigma_f = [.005]*min_class_points.shape[1]
+    if not isinstance(list_sigma_f, list):
+        list_sigma_f = [list_sigma_f]*min_class_points.shape[1]
+    if num_generated_points is None:
+        import math
+        num_generated_points = math.ceil((len(maj_class_points) + len(min_class_points)) / len(min_class_points))
+        
+    # Verifying constraints
+    if k <= 1:
+        print("[PARAMETER ERROR] Value of parameter k is too small")
+        raise SystemExit
+    if k > len(min_class_points):
+        print("[PARAMETER ERROR] Value of parameter k is too large for minority class points")
+        raise SystemExit
+    if num_shadow_points < 1:
+        print("[PARAMETER ERROR] Number of shadow points is too small")
+        raise SystemExit
+    if not all(elem >= 0.0 and elem <= 1.0 for elem in list_sigma_f):
+        print("[PARAMETER ERROR] All elements in list of sigmas have to be in [0.0,1.0]")
+    if num_aff_comb < 1:
+        print("[PARAMETER ERROR] Number of affine combinations is too small")
+        raise SystemExit
+    if num_aff_comb > k * num_shadow_points:
+        print("[PARAMETER ERROR] Number of affine combinations must be smaller or equal to k * number of shadow points")
+        raise SystemExit 
+
+    return loras_oversampling(min_class_points, k, num_shadow_points, list_sigma_f, num_generated_points, num_aff_comb, random_state)
+
 def fit_resample(maj_class_points, min_class_points, k=None, num_shadow_points=None, list_sigma_f=None, num_generated_points=None, num_aff_comb=None, random_state=42):
     
     # Verifying constraints
