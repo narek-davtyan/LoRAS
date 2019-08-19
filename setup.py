@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="loras",
-    version="0.0.18-beta",
+    version="0.0.19-beta",
     author="Saptarshi Bej, Narek Davtyan",
     author_email="davtyannarek@hotmail.com",
     description="A small package for LoRAS oversampling",

@@ -1,6 +1,9 @@
-
 # LoRAS
 Localized Randomized Affine Shadowsampling (LoRAS) oversampling technique
+
+## Installation
+The latest version is available on PyPi and installable with the command: `pip install loras`
+
 ## Usage
 There is just one method `fit_resample(maj_class_points, min_class_points, k, num_shadow_points, list_sigma_f, num_generated_points, num_aff_comb, random_state=42)`
 
@@ -19,4 +22,4 @@ There are also optional parameters:
 
 Output:
 
- - `min_class_points::oversampled_set`
+ - `min_class_points::oversampled_set` : Concatenation of original data points and oversampled ones
