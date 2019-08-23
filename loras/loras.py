@@ -74,19 +74,19 @@ def fit_resample(maj_class_points, min_class_points, k=None, num_shadow_points=N
     
     # Completing missing parameters w/ default values
     if k is None:
-        k = 8 if len(min_class_points)<100 else 30
+        k = 5 if len(min_class_points)<100 else 30
     if num_aff_comb is None:
         num_aff_comb = min_class_points.shape[1]
     if num_shadow_points is None:
         import math
-        num_shadow_points = math.ceil(2*num_aff_comb / k)
+        num_shadow_points = max(math.ceil(2*num_aff_comb / k),40)
     if list_sigma_f is None:
         list_sigma_f = [.005]*min_class_points.shape[1]
     if not isinstance(list_sigma_f, list):
         list_sigma_f = [list_sigma_f]*min_class_points.shape[1]
     if num_generated_points is None:
         import math
-        num_generated_points = math.ceil((len(maj_class_points) + len(min_class_points)) / len(min_class_points))
+        num_generated_points = math.ceil((len(maj_class_points) + len(min_class_points)) / (num_hyp_points * len(min_class_points)))
         
     # Verifying constraints
     if k <= 1:
