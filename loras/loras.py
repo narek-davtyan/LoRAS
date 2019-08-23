@@ -13,7 +13,7 @@ def knn(min_class_points, k):
 
 def neighbourhood_oversampling(args):
     # Extracting arguments
-    neighbourhood,k,num_shadow_points,list_sigma_f,num_generated_points,num_aff_comb,random_state = args
+    neighbourhood,k,num_shadow_points,list_sigma_f,num_generated_points,num_hyp_points,num_aff_comb,random_state = args
     # Setting seed
     np.random.seed(random_state)
     # Calculating shadow points
@@ -27,8 +27,7 @@ def neighbourhood_oversampling(args):
     idx = np.random.randint(num_shadow_points*k, size=(num_generated_points,num_aff_comb))
     # Create random weights for selected points
     affine_weights = []
-    num_pts = 1
-    for _ in range(num_pts):
+    for _ in range(num_hyp_points):
         # Create random weights for selected points
         weights = np.random.randint(100, size=idx.shape)
         sums = np.repeat(np.reshape(np.sum(weights,axis=1),(num_generated_points,1)), num_aff_comb, axis=1)
@@ -43,13 +42,13 @@ def neighbourhood_oversampling(args):
     
     return neighbourhood_loras_set
 
-def loras_oversampling(min_class_points, k, num_shadow_points, list_sigma_f, num_generated_points, num_aff_comb, random_state):
+def loras_oversampling(min_class_points, k, num_shadow_points, list_sigma_f, num_generated_points, num_hyp_points, num_aff_comb, random_state):
     # Calculating neighbourhoods of each minority class parent data point p in min_class_points
     neighbourhoods = knn(min_class_points, k)
     # Preparing arguments
     args = []
     for neighbourhood in neighbourhoods:
-        arg = (neighbourhood, k, num_shadow_points, list_sigma_f, num_generated_points, num_aff_comb, random_state)
+        arg = (neighbourhood, k, num_shadow_points, list_sigma_f, num_generated_points, num_hyp_points, num_aff_comb, random_state)
         args.append(arg)
     # Generating points
     loras_set = []
@@ -60,7 +59,7 @@ def loras_oversampling(min_class_points, k, num_shadow_points, list_sigma_f, num
     
     return np.asarray(loras_set)
 
-def fit_resample(maj_class_points, min_class_points, k=None, num_shadow_points=None, list_sigma_f=None, num_generated_points=None, num_aff_comb=None, random_state=42):
+def fit_resample(maj_class_points, min_class_points, k=None, num_shadow_points=None, list_sigma_f=None, num_generated_points=None, num_hyp_points=1, num_aff_comb=None, random_state=42):
     
     # Verifying constraints
     if len(min_class_points)==0:
@@ -110,4 +109,4 @@ def fit_resample(maj_class_points, min_class_points, k=None, num_shadow_points=N
     
     min_class_points_copy = np.copy(min_class_points)
 
-    return np.concatenate((min_class_points,loras_oversampling(min_class_points_copy, k, num_shadow_points, list_sigma_f, num_generated_points, num_aff_comb, random_state)))
+    return np.concatenate((min_class_points,loras_oversampling(min_class_points_copy, k, num_shadow_points, list_sigma_f, num_generated_points, num_hyp_points, num_aff_comb, random_state)))
