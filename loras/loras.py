@@ -68,8 +68,8 @@ def fit_resample(maj_class_points, min_class_points, k=None, num_shadow_points=N
     if len(maj_class_points)==0:
         print("[PARAMETER ERROR] Empty majority class")
         raise SystemExit
-    if len(min_class_points) >= len(maj_class_points):
-        print("[PARAMETER ERROR] Number of points in minority class is equal to or exceeds number of points in the majority class")
+    if len(min_class_points) > len(maj_class_points):
+        print("[PARAMETER ERROR] Number of points in minority class exceeds number of points in the majority class")
         raise SystemExit
     
     # Completing missing parameters w/ default values
